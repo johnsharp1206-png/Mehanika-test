@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ММТ / ИМД: Имтиҳони Физика (5-Б / 5-В)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+
+    /* Full-bleed edge-to-edge layout on mobile portrait screens */
+    .app-shell {
+      width: 100%;
+      min-height: 100dvh;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 640px) {
+      body {
+        padding: 12px;
+        background: #e2e8f0;
+      }
+      .app-shell {
+        max-width: 540px;
+        min-height: calc(100dvh - 24px);
+        height: calc(100dvh - 24px);
+        border-radius: 16px;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12);
+        overflow: hidden;
+      }
+    }
+
+    /* True Fullscreen & Pseudo-Fullscreen Mode (100vw x 100vh without outer framing) */
+    body.is-fullscreen-mode {
+      padding: 0 !important;
+      margin: 0 !important;
+      background: #ffffff !important;
+      overflow: hidden !important;
+    }
+
+    body.is-fullscreen-mode .app-shell,
+    .app-shell:fullscreen,
+    .app-shell:-webkit-full-screen {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      max-width: 100vw !important;
+      height: 100vh !important;
+      height: 100dvh !important;
+      min-height: 100dvh !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      z-index: 9999 !important;
+      background: #ffffff !important;
+    }
+
+    /* Ultra-compact single-row sticky header */
+    .compact-header {
+      height: 44px;
+      min-height: 44px;
+      padding: 4px 10px;
+      background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14);
+    }
+
+    /* Custom subtle scrollbar for question area */
+    .scroll-area {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 10px 12px 14px 12px;
+    }
+
+    /* Compact bottom action bar */
+    .compact-nav {
+      min-height: 48px;
+      padding: 6px 10px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      z-index: 20;
+    }
+
+    /* Question palette horizontal strip */
+    .palette-strip {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      padding: 5px 10px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      scrollbar-width: none;
+    }
+    .palette-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .q-pill {
+      min-width: 26px;
+      height: 24px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #475569;
+      flex-shrink: 0;
+      transition: all 0.12s ease;
+    }
+    .q-pill.answered {
+      background: #dbeafe;
+      border-color: #3b82f6;
+      color: #1d4ed8;
+    }
+    .q-pill.active {
+      background: #2563eb;
+      border-color: #1d4ed8;
+      color: #ffffff;
+      transform: scale(1.05);
+    }
+
+    /* Option card styling */
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 9px 11px;
+      border-radius: 10px;
+      border: 1.5px solid #e2e8f0;
+      background: #ffffff;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      transition: all 0.12s ease;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+    .option-btn:active {
+      transform: scale(0.995);
+    }
+    .option-btn.selected {
+      border-color: #2563eb;
+      background: #eff6ff;
+      color: #1e3a8a;
+    }
+    .option-letter {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .option-btn.selected .option-letter {
+      background: #2563eb;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <!-- ==================== SCREEN 1: REGISTRATION / START ==================== -->
+    <div id="start-screen" class="flex flex-col h-full justify-between p-4 sm:p-6 overflow-y-auto bg-white">
+      <div>
+        <!-- Prominent Fullscreen Banner Button at Top of Entry Screen -->
+        <button
+          type="button"
+          onclick="toggleFullscreen()"
+          id="start-fullscreen-btn"
+          class="w-full mb-3 py-2.5 px-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white text-xs font-bold shadow-sm flex items-center justify-center gap-2 transition"
+        >
+          <svg id="start-fs-icon-expand" class="w-4 h-4 text-blue-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+          </svg>
+          <svg id="start-fs-icon-compress" class="w-4 h-4 text-amber-400 shrink-0 hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+          </svg>
+          <span id="start-fs-label">На весь экран / Ба пуррагии экран</span>
+        </button>
+
+        <!-- Compact Brand Badge -->
+        <div class="flex items-center justify-between mb-3">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold border border-blue-100">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+            </svg>
+            ММТ / ИМД • ФИЗИКА
+          </span>
+          <button type="button" onclick="openLeaderboard()" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 text-xs font-semibold border border-amber-200 active:bg-amber-100">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+            </svg>
+            Рейтинг
+          </button>
+        </div>
+
+        <h1 class="text-xl font-extrabold text-slate-900 leading-snug mb-1">
+          Имтиҳони Физика
+        </h1>
+        <p class="text-xs text-slate-500 mb-4">
+          Бахшҳои «Механика» ва «Термодинамика» • 27 савол • 45 дақиқа
+        </p>
+
+        <!-- Exam Structure Summary -->
+        <div class="grid grid-cols-3 gap-2 mb-4 text-center">
+          <div class="p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+            <div class="text-xs font-bold text-blue-700">Қисми А</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">20 савол (1 хол)</div>
+          </div>
+          <div class="p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+            <div class="text-xs font-bold text-indigo-700">Қисми Б</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">4 савол (4 хол)</div>
+          </div>
+          <div class="p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+            <div class="text-xs font-bold text-emerald-700">Қисми В</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">3 савол (2 хол)</div>
+          </div>
+        </div>
+
+        <!-- Registration Form -->
+        <form id="start-form" onsubmit="handleStartExam(event)" class="space-y-3.5">
+          <div>
+            <label for="student-name" class="block text-xs font-bold text-slate-700 mb-1">
+              Ному насаби хонанда
+            </label>
+            <input
+              type="text"
+              id="student-name"
+              required
+              autocomplete="name"
+              placeholder="Масалан: Яхшибоев Муҳаммад"
+              class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">
+              Гурӯҳро интихоб кунед (танҳо 5-Б ё 5-В)
+            </label>
+            <div class="grid grid-cols-2 gap-2.5">
+              <label class="cursor-pointer">
+                <input type="radio" name="student-group" value="5-Б" class="peer sr-only" checked />
+                <div class="py-2.5 px-3 rounded-xl border-2 border-slate-200 bg-slate-50 text-center font-bold text-sm text-slate-700 peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700 transition">
+                  Гурӯҳи 5-Б
+                </div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="student-group" value="5-В" class="peer sr-only" />
+                <div class="py-2.5 px-3 rounded-xl border-2 border-slate-200 bg-slate-50 text-center font-bold text-sm text-slate-700 peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700 transition">
+                  Гурӯҳи 5-В
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div id="start-error" class="hidden text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg p-2"></div>
+
+          <button
+            type="submit"
+            class="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm shadow-md shadow-blue-600/20 transition flex items-center justify-center gap-2 mt-2"
+          >
+            <span>Оғози имтиҳон</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <div id="fs-status-hint" class="pt-3 text-center text-[11px] text-slate-400">
+        Максимум хол: 42 хол • Вақт: 45:00
+      </div>
+    </div>
+
+    <!-- ==================== SCREEN 2: ACTIVE EXAM ==================== -->
+    <div id="exam-screen" class="hidden flex-col h-full w-full bg-white">
+      <!-- Ultra-Compact Single-Row Sticky Header (44px height) -->
+      <header class="compact-header">
+        <div class="flex items-center gap-1.5 min-w-0">
+          <span class="w-6 h-6 rounded-md bg-white/15 flex items-center justify-center shrink-0">
+            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+            </svg>
+          </span>
+          <span class="text-xs font-bold tracking-tight whitespace-nowrap">ММТ</span>
+        </div>
+
+        <!-- Live Countdown Timer -->
+        <div id="timer-badge" class="px-2 py-0.5 rounded-md bg-white text-red-600 font-extrabold text-xs tracking-wide tabular-nums shadow-xs shrink-0">
+          45:00
+        </div>
+
+        <!-- Student Name + Fullscreen Toggle + Rating Button -->
+        <div class="flex items-center gap-1 min-w-0">
+          <span id="header-student-info" class="text-[11px] font-medium bg-white/15 px-1.5 py-0.5 rounded-md truncate max-w-[92px] sm:max-w-[155px]">
+            Хонанда (5-Б)
+          </span>
+          <button
+            type="button"
+            onclick="toggleFullscreen()"
+            title="На весь экран / Выйти из полноэкранного режима"
+            aria-label="Весь экран"
+            class="px-2 py-1 rounded-md bg-white/20 hover:bg-white/30 active:bg-white/35 text-[11px] font-semibold flex items-center gap-1 shrink-0"
+          >
+            <svg id="exam-fs-icon-expand" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+            </svg>
+            <svg id="exam-fs-icon-compress" class="w-3.5 h-3.5 hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+            </svg>
+            <span id="exam-fs-label" class="hidden sm:inline">Весь экран</span>
+          </button>
+          <button type="button" onclick="openLeaderboard()" title="Рейтинг" class="px-2 py-1 rounded-md bg-white/20 hover:bg-white/30 active:bg-white/35 text-[11px] font-semibold flex items-center gap-1 shrink-0">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+            </svg>
+            <span class="hidden sm:inline">Рейтинг</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Compact Horizontal Question Numbers Strip -->
+      <div id="question-palette" class="palette-strip"></div>
+
+      <!-- Main Question Scroll Area (Maximized Vertical Space) -->
+      <main id="question-container" class="scroll-area">
+        <!-- Injected dynamically -->
+      </main>
+
+      <!-- Ultra-Compact Bottom Navigation Bar -->
+      <footer class="compact-nav">
+        <button
+          type="button"
+          id="btn-prev"
+          onclick="prevQuestion()"
+          class="px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 text-xs font-bold active:bg-slate-100 disabled:opacity-40 flex items-center gap-1"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          Қафо
+        </button>
+
+        <div id="progress-indicator" class="text-[11px] font-semibold text-slate-500">
+          1 / 27
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <button
+            type="button"
+            id="btn-finish-early"
+            onclick="confirmFinishModal()"
+            class="px-2.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-bold"
+          >
+            Анҷом
+          </button>
+          <button
+            type="button"
+            id="btn-next"
+            onclick="nextQuestion()"
+            class="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-xs font-bold flex items-center gap-1"
+          >
+            Ба пеш
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ==================== SCREEN 3: RESULTS ==================== -->
+    <div id="result-screen" class="hidden flex-col h-full w-full bg-white">
+      <header class="compact-header">
+        <span class="text-xs font-bold">Натиҷаи имтиҳон</span>
+        <div class="flex items-center gap-1.5">
+          <button
+            type="button"
+            onclick="toggleFullscreen()"
+            title="На весь экран"
+            class="px-2 py-1 rounded-md bg-white/20 hover:bg-white/30 text-[11px] font-semibold flex items-center gap-1"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+            </svg>
+          </button>
+          <button type="button" onclick="openLeaderboard()" class="px-2.5 py-1 rounded-md bg-white/20 text-xs font-semibold">
+            Рейтинг (5-Б / 5-В)
+          </button>
+        </div>
+      </header>
+
+      <div id="result-content" class="scroll-area space-y-3">
+        <!-- Populated after grading -->
+      </div>
+
+      <div class="compact-nav justify-center">
+        <button
+          type="button"
+          onclick="restartExam()"
+          class="w-full py-2.5 px-4 rounded-xl bg-blue-600 text-white text-xs font-bold active:bg-blue-700"
+        >
+          Аз нав супоридан
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: CONFIRM FINISH ==================== -->
+  <div id="confirm-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xs w-full p-4 shadow-xl border border-slate-100">
+      <h3 class="text-base font-extrabold text-slate-900 mb-1">Анҷом додани имтиҳон?</h3>
+      <p id="confirm-modal-text" class="text-xs text-slate-600 mb-4 leading-relaxed">
+        Шумо ба ҳамаи саволҳо ҷавоб додед. Оё мехоҳед натиҷаро ҳисоб кунед?
+      </p>
+      <div class="grid grid-cols-2 gap-2">
+        <button type="button" onclick="closeConfirmModal()" class="py-2 px-3 rounded-xl border border-slate-300 text-slate-700 text-xs font-bold">
+          Бозгашт
+        </button>
+        <button type="button" onclick="finishExam()" class="py-2 px-3 rounded-xl bg-emerald-600 text-white text-xs font-bold">
+          Бале, анҷом
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: LEADERBOARD ==================== -->
+  <div id="leaderboard-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-2 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full max-h-[88dvh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="px-3.5 py-2.5 bg-blue-700 text-white flex items-center justify-between">
+        <div>
+          <h3 class="text-sm font-extrabold">Рейтинги хонандагон</h3>
+          <p class="text-[10px] text-blue-100">Гурӯҳҳои 5-Б ва 5-В • Максимум 42 хол</p>
+        </div>
+        <button type="button" onclick="closeLeaderboard()" class="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center text-white font-bold">
+          ✕
+        </button>
+      </div>
+
+      <!-- Group Filter Tabs -->
+      <div class="flex gap-1.5 p-2 bg-slate-50 border-b border-slate-200">
+        <button type="button" onclick="setLeaderboardFilter('ALL')" id="lb-tab-ALL" class="flex-1 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white">
+          Ҳама (5-Б / 5-В)
+        </button>
+        <button type="button" onclick="setLeaderboardFilter('5-Б')" id="lb-tab-5-Б" class="flex-1 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-600 border border-slate-200">
+          Гурӯҳи 5-Б
+        </button>
+        <button type="button" onclick="setLeaderboardFilter('5-В')" id="lb-tab-5-В" class="flex-1 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-600 border border-slate-200">
+          Гурӯҳи 5-В
+        </button>
+      </div>
+
+      <div id="leaderboard-list" class="flex-1 overflow-y-auto p-2.5 space-y-1.5">
+        <div class="text-center text-xs text-slate-400 py-8">Боргирии натиҷаҳо...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase + App Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // ==================== 1. 27 TAJIK PHYSICS QUESTIONS ====================
+    const QUESTIONS = [
+      // --- ҚИСМИ А: Интихоби як ҷавоби дуруст (Саволҳои 1-20, 1 холӣ) ---
+      {
+        id: 1,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Кинематика",
+        type: "single",
+        points: 1,
+        text: "1. Ҷисм аз ҳолати оромӣ бо шитоби доимии 2 м/с² ба ҳаракат даромад. Пас аз 5 сония суръати он ба чанд баробар мешавад?",
+        options: ["5 м/с", "10 м/с", "2,5 м/с", "25 м/с"],
+        correct: 1
+      },
+      {
+        id: 2,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Кинематика",
+        type: "single",
+        points: 1,
+        text: "2. Автомобил нисфи аввали роҳро бо суръати 60 км/соат ва нисфи дуюми роҳро бо суръати 40 км/соат тай кард. Суръати миёнаи автомобилро дар тамоми роҳ ёбед.",
+        options: ["50 км/соат", "48 км/соат", "52 км/соат", "45 км/соат"],
+        correct: 1
+      },
+      {
+        id: 3,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Кинематика",
+        type: "single",
+        points: 1,
+        text: "3. Санг аз баландии 45 м озодона меафтад (g = 10 м/с²). Вақти афтиши сангро муайян кунед.",
+        options: ["2 с", "3 с", "4,5 с", "9 с"],
+        correct: 1
+      },
+      {
+        id: 4,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Кинематика",
+        type: "single",
+        points: 1,
+        text: "4. Нуқтаи моддӣ давраи радиусаш 0,5 м-ро бо суръати кунҷии 4 рад/с давр мезанад. Шитоби марказшитоби онро ёбед.",
+        options: ["2 м/с²", "4 м/с²", "8 м/с²", "16 м/с²"],
+        correct: 2
+      },
+      {
+        id: 5,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Динамика",
+        type: "single",
+        points: 1,
+        text: "5. Ба ҷисми массааш 4 кг қувваи натиҷавии 12 Н таъсир мекунад. Ҷисм бо чӣ гуна шитоб ҳаракат мекунад?",
+        options: ["48 м/с²", "3 м/с²", "0,33 м/с²", "8 м/с²"],
+        correct: 1
+      },
+      {
+        id: 6,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Динамика",
+        type: "single",
+        points: 1,
+        text: "6. Пружинаи сахтиаш 200 Н/м зери таъсири қувва ба андозаи 5 см ёзид. Қувваи чандирии пайдошударо ҳисоб кунед.",
+        options: ["1000 Н", "40 Н", "10 Н", "4 Н"],
+        correct: 2
+      },
+      {
+        id: 7,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Динамика",
+        type: "single",
+        points: 1,
+        text: "7. Брусоки массааш 2 кг дар сатҳи уфуқӣ лағжида меравад. Агар коэффитсиенти соиш 0,2 бошад, қувваи соиши лағзишро ёбед (g = 10 м/с²).",
+        options: ["4 Н", "10 Н", "20 Н", "40 Н"],
+        correct: 0
+      },
+      {
+        id: 8,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Динамика",
+        type: "single",
+        points: 1,
+        text: "8. Масофаи байни ду ҷисм 2 маротиба кам карда шавад, қувваи ҷозибаи умумиҷаҳонии байни онҳо чӣ тавр тағйир меёбад?",
+        options: ["2 маротиба зиёд мешавад", "4 маротиба зиёд мешавад", "2 маротиба кам мешавад", "4 маротиба кам мешавад"],
+        correct: 1
+      },
+      {
+        id: 9,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Қонунҳои бақо",
+        type: "single",
+        points: 1,
+        text: "9. Импулси ҷисми массааш 3 кг, ки бо суръати 4 м/с ҳаракат мекунад, ба чанд баробар аст?",
+        options: ["0,75 кг·м/с", "7 кг·м/с", "12 кг·м/с", "24 кг·м/с"],
+        correct: 2
+      },
+      {
+        id: 10,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Қонунҳои бақо",
+        type: "single",
+        points: 1,
+        text: "10. Энергияи кинетикии ҷисми массааш 2 кг ҳангоми бо суръати 6 м/с ҳаракат кардан чӣ қадар аст?",
+        options: ["12 Ҷ", "36 Ҷ", "72 Ҷ", "18 Ҷ"],
+        correct: 1
+      },
+      {
+        id: 11,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Қонунҳои бақо",
+        type: "single",
+        points: 1,
+        text: "11. Муҳаррик дар муддати 20 сония кори 4000 Ҷ-ро иҷро мекунад. Тавоноии муҳаррикро муайян кунед.",
+        options: ["200 Вт", "80 000 Вт", "20 Вт", "400 Вт"],
+        correct: 0
+      },
+      {
+        id: 12,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Статика ва Гидростатика",
+        type: "single",
+        points: 1,
+        text: "12. Фишори сутуни обро дар умқи 2 м ҳисоб кунед (зичии об 1000 кг/м³, g = 10 м/с²).",
+        options: ["200 Па", "2000 Па", "20 кПа", "500 Па"],
+        correct: 2
+      },
+      {
+        id: 13,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Статика ва Гидростатика",
+        type: "single",
+        points: 1,
+        text: "13. Ҷисми ҳаҷмаш 0,005 м³ пурра дар об ғӯтонида шудааст. Қувваи Архимеди ба он таъсиркунандаро ёбед (ρ = 1000 кг/м³, g = 10 м/с²).",
+        options: ["5 Н", "50 Н", "500 Н", "0,5 Н"],
+        correct: 1
+      },
+      {
+        id: 14,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Физикаи молекулавӣ",
+        type: "single",
+        points: 1,
+        text: "14. Дар 4 моли модда чанд молекула мавҷуд аст? (Адади Авогадро Nₐ = 6·10²³ мол⁻¹)",
+        options: ["1,5·10²³", "6·10²³", "2,4·10²⁴", "24·10²⁴"],
+        correct: 2
+      },
+      {
+        id: 15,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Физикаи молекулавӣ",
+        type: "single",
+        points: 1,
+        text: "15. Ҳарорати 27 °C дар ҷадвали мутлақи Келвин ба чанд баробар аст?",
+        options: ["246 К", "273 К", "300 К", "327 К"],
+        correct: 2
+      },
+      {
+        id: 16,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Қонунҳои газҳо",
+        type: "single",
+        points: 1,
+        text: "16. Дар раванди изотермӣ ҳаҷми гази идеалӣ 3 маротиба кам карда шуд. Фишори газ чӣ тавр тағйир меёбад?",
+        options: ["3 маротиба кам мешавад", "3 маротиба зиёд мешавад", "Тағйир намеёбад", "9 маротиба зиёд мешавад"],
+        correct: 1
+      },
+      {
+        id: 17,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Қонунҳои газҳо",
+        type: "single",
+        points: 1,
+        text: "17. Дар кадом изораванд кори гази идеалӣ ба сифр баробар аст (A = 0)?",
+        options: ["Изобарӣ", "Изотермӣ", "Изохорӣ", "Адиабатӣ"],
+        correct: 2
+      },
+      {
+        id: 18,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Термодинамика",
+        type: "single",
+        points: 1,
+        text: "18. Ба газ миқдори гармии 500 Ҷ дода шуд ва газ кори 200 Ҷ-ро иҷро кард. Тағйирёбии энергияи дохилии газро ёбед.",
+        options: ["700 Ҷ", "300 Ҷ", "2,5 Ҷ", "-300 Ҷ"],
+        correct: 1
+      },
+      {
+        id: 19,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Термодинамика",
+        type: "single",
+        points: 1,
+        text: "19. Ҳарорати гармкунаки мошини идеалии Карно 400 К ва ҳарорати хунуккунак 300 К аст. Коэффитсиенти кори фоиданоки (ККФ) онро ёбед.",
+        options: ["75 %", "25 %", "33 %", "50 %"],
+        correct: 1
+      },
+      {
+        id: 20,
+        part: "ҚИСМИ А • 1 ХОЛ",
+        topic: "Термодинамика",
+        type: "single",
+        points: 1,
+        text: "20. Барои об кардани 2 кг яхи дар ҳарорати 0 °C буда чӣ қадар миқдори гармӣ лозим аст? (λ = 3,3·10⁵ Ҷ/кг)",
+        options: ["1,65·10⁵ Ҷ", "3,3·10⁵ Ҷ", "6,6·10⁵ Ҷ", "6,6·10⁴ Ҷ"],
+        correct: 2
+      },
+
+      // --- ҚИСМИ Б: Мувофиқаткунӣ (Саволҳои 21-24, то 4 холӣ) ---
+      {
+        id: 21,
+        part: "ҚИСМИ Б • 4 ХОЛ",
+        topic: "Кинематика (Мувофиқат)",
+        type: "matching",
+        points: 4,
+        text: "21. Байни бузургиҳои физикии кинематика ва формулаҳои онҳо мувофиқат гузоред:",
+        left: [
+          "1) Шитоби марказшитоб",
+          "2) Роҳи тайшуда дар ҳаракати собитшитоб (v₀ = 0)",
+          "3) Суръати хаттӣ дар ҳаракати даврӣ",
+          "4) Басомади гардиш"
+        ],
+        right: [
+          "A) v = 2πR / T",
+          "B) a = v² / R",
+          "C) ν = 1 / T",
+          "D) S = a·t² / 2",
+          "E) F = m·a"
+        ],
+        correctMap: { 0: "B", 1: "D", 2: "A", 3: "C" }
+      },
+      {
+        id: 22,
+        part: "ҚИСМИ Б • 4 ХОЛ",
+        topic: "Динамика ва Энергия (Мувофиқат)",
+        type: "matching",
+        points: 4,
+        text: "22. Байни бузургиҳои динамика ва воҳидҳои онҳо дар системаи байналмилалии СИ мувофиқат гузоред:",
+        left: [
+          "1) Қувва",
+          "2) Импулси ҷисм",
+          "3) Энергия ва кор",
+          "4) Тавоноӣ"
+        ],
+        right: [
+          "A) Ватт (Вт)",
+          "B) Нютон (Н)",
+          "C) Ҷоул (Ҷ)",
+          "D) кг·м/с",
+          "E) Паскал (Па)"
+        ],
+        correctMap: { 0: "B", 1: "D", 2: "C", 3: "A" }
+      },
+      {
+        id: 23,
+        part: "ҚИСМИ Б • 4 ХОЛ",
+        topic: "Қонунҳои газҳо (Мувофиқат)",
+        type: "matching",
+        points: 4,
+        text: "23. Байни изоравандҳо дар гази идеалӣ ва муодилаҳои онҳо мувофиқат гузоред:",
+        left: [
+          "1) Раванди изотермӣ (T = const)",
+          "2) Раванди изобарӣ (P = const)",
+          "3) Раванди изохорӣ (V = const)",
+          "4) Муодилаи Менделеев-Клапейрон"
+        ],
+        right: [
+          "A) V / T = const",
+          "B) P·V = ν·R·T",
+          "C) P·V = const",
+          "D) P / T = const",
+          "E) Q = ΔU"
+        ],
+        correctMap: { 0: "C", 1: "A", 2: "D", 3: "B" }
+      },
+      {
+        id: 24,
+        part: "ҚИСМИ Б • 4 ХОЛ",
+        topic: "Термодинамика (Мувофиқат)",
+        type: "matching",
+        points: 4,
+        text: "24. Байни равандҳои гармӣ ва формулаҳои ҳисобкунии миқдори гармӣ мувофиқат гузоред:",
+        left: [
+          "1) Гарм кардан ё хунук кардани ҷисм",
+          "2) Обшавии ҷисми кристаллӣ",
+          "3) Бухоршавии моеъ",
+          "4) Сӯхтани пурраи сӯзишворӣ"
+        ],
+        right: [
+          "A) Q = L · m",
+          "B) Q = q · m",
+          "C) Q = c · m · Δt",
+          "D) Q = λ · m",
+          "E) Q = P · ΔV"
+        ],
+        correctMap: { 0: "C", 1: "D", 2: "A", 3: "B" }
+      },
+
+      // --- ҚИСМИ В: Масъалаҳои кушод бо ҷавоби ададӣ (Саволҳои 25-27, 2 холӣ) ---
+      {
+        id: 25,
+        part: "ҚИСМИ В • 2 ХОЛ",
+        topic: "Қонунҳои бақо (Ҷавоби ададӣ)",
+        type: "numeric",
+        points: 2,
+        unit: "м/с",
+        text: "25. Аробачаи массааш 4 кг, ки бо суръати 3 м/с ҳаракат мекунад, бо аробачаи ороми массааш 2 кг бархӯрди ғайричандир мекунад. Суръати умумии аробачаҳоро пас аз бархӯрд бо м/с ёбед.",
+        correctNumeric: 2
+      },
+      {
+        id: 26,
+        part: "ҚИСМИ В • 2 ХОЛ",
+        topic: "Термодинамика (Ҷавоби ададӣ)",
+        type: "numeric",
+        points: 2,
+        unit: "кҶ",
+        text: "26. 2 мол гази идеалии якатомаро дар фишори доимӣ ба андозаи 100 К гарм карданд. Кори иҷрокардаи газро бо килоҷоул (кҶ) ҳисоб кунед (R = 8,3 Ҷ/(мол·К), ҷавобро то даҳӣ нависед, масалан: 1.66).",
+        correctNumeric: 1.66
+      },
+      {
+        id: 27,
+        part: "ҚИСМИ В • 2 ХОЛ",
+        topic: "Механика (Ҷавоби ададӣ)",
+        type: "numeric",
+        points: 2,
+        unit: "%",
+        text: "27. Бо ёрии сатҳи моил бори массааш 40 кг-ро ба баландии 1,5 м бардоштанд. Агар кори пурраи сарфшуда 750 Ҷ бошад, коэффитсиенти кори фоиданоки (ККФ) сатҳи моилро бо фоиз (%) ёбед (g = 10 м/с²).",
+        correctNumeric: 80
+      }
+    ];
+
+    // ==================== 2. STATE & FIREBASE SETUP ====================
+    const STORAGE_KEY = "mmt_physics_leaderboard_5bv_v1";
+    let studentName = "";
+    let studentGroup = "5-Б";
+    let currentIndex = 0;
+    let userAnswers = {};
+    let timeRemaining = 45 * 60; // 45 minutes
+    let timerInterval = null;
+    let examFinished = false;
+    let leaderboardData = [];
+    let leaderboardFilter = "ALL";
+
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+    const appId = typeof __app_id !== "undefined" ? __app_id : "mmt-physics-5bv";
+
+    async function initFirebase() {
+      try {
+        if (typeof __firebase_config !== "undefined" && __firebase_config) {
+          const firebaseConfig = JSON.parse(__firebase_config);
+          const app = initializeApp(firebaseConfig);
+          auth = getAuth(app);
+          db = getFirestore(app);
+
+          if (typeof __initial_auth_token !== "undefined" && __initial_auth_token) {
+            await signInWithCustomToken(auth, __initial_auth_token);
+          } else {
+            await signInAnonymously(auth);
+          }
+          currentUser = auth.currentUser;
+          subscribeLeaderboard();
+        } else {
+          loadLocalLeaderboard();
+        }
+      } catch (err) {
+        console.warn("Firebase fallback to local:", err);
+        loadLocalLeaderboard();
+      }
+    }
+
+    function loadLocalLeaderboard() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        leaderboardData = raw ? JSON.parse(raw) : [];
+      } catch {
+        leaderboardData = [];
+      }
+      renderLeaderboard();
+    }
+
+    function subscribeLeaderboard() {
+      if (!db || !currentUser) {
+        loadLocalLeaderboard();
+        return;
+      }
+      try {
+        const colRef = collection(db, "artifacts", appId, "public", "data", "results");
+        onSnapshot(
+          colRef,
+          (snapshot) => {
+            const list = [];
+            snapshot.forEach((doc) => {
+              const d = doc.data();
+              if (d && (d.group === "5-Б" || d.group === "5-В")) {
+                list.push({ id: doc.id, ...d });
+              }
+            });
+            leaderboardData = list;
+            renderLeaderboard();
+          },
+          (error) => {
+            console.warn("Snapshot error:", error);
+            loadLocalLeaderboard();
+          }
+        );
+      } catch (e) {
+        loadLocalLeaderboard();
+      }
+    }
+
+    async function saveScoreToLeaderboard(entry) {
+      // Save locally first so user always sees immediate result
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        const existing = raw ? JSON.parse(raw) : [];
+        existing.push(entry);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+        if (!db || !currentUser) {
+          leaderboardData = existing;
+          renderLeaderboard();
+        }
+      } catch (e) {
+        console.warn("Local save warning:", e);
+      }
+
+      // Save to Firestore if available
+      if (db && currentUser) {
+        try {
+          const colRef = collection(db, "artifacts", appId, "public", "data", "results");
+          await addDoc(colRef, entry);
+        } catch (err) {
+          console.warn("Firestore save error:", err);
+        }
+      }
+    }
+
+    // ==================== 3. EXAM LIFECYCLE ====================
+    window.handleStartExam = function (e) {
+      e.preventDefault();
+      const nameInput = document.getElementById("student-name");
+      const groupRadio = document.querySelector('input[name="student-group"]:checked');
+      const errBox = document.getElementById("start-error");
+
+      const cleanName = (nameInput.value || "").trim();
+      const chosenGroup = groupRadio ? groupRadio.value : "";
+
+      if (cleanName.length < 2) {
+        errBox.textContent = "Лутфан ному насаби худро дуруст ворид кунед.";
+        errBox.classList.remove("hidden");
+        return;
+      }
+      if (chosenGroup !== "5-Б" && chosenGroup !== "5-В") {
+        errBox.textContent = "Танҳо гурӯҳҳои 5-Б ё 5-В иҷозат дода мешаванд.";
+        errBox.classList.remove("hidden");
+        return;
+      }
+
+      errBox.classList.add("hidden");
+      studentName = cleanName;
+      studentGroup = chosenGroup;
+      currentIndex = 0;
+      userAnswers = {};
+      timeRemaining = 45 * 60;
+      examFinished = false;
+
+      document.getElementById("header-student-info").textContent = `${studentName} (${studentGroup})`;
+      document.getElementById("start-screen").classList.add("hidden");
+      document.getElementById("result-screen").classList.add("hidden");
+      const examScreen = document.getElementById("exam-screen");
+      examScreen.classList.remove("hidden");
+      examScreen.classList.add("flex");
+
+      renderPalette();
+      renderQuestion();
+      startTimer();
+    };
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      updateTimerUI();
+      timerInterval = setInterval(() => {
+        if (examFinished) {
+          clearInterval(timerInterval);
+          return;
+        }
+        timeRemaining--;
+        updateTimerUI();
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          finishExam();
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      const mins = Math.floor(Math.max(0, timeRemaining) / 60);
+      const secs = Math.max(0, timeRemaining) % 60;
+      const badge = document.getElementById("timer-badge");
+      badge.textContent = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+      if (timeRemaining <= 180) {
+        badge.classList.add("animate-pulse", "bg-red-600", "text-white");
+        badge.classList.remove("bg-white", "text-red-600");
+      } else {
+        badge.classList.remove("animate-pulse", "bg-red-600", "text-white");
+        badge.classList.add("bg-white", "text-red-600");
+      }
+    }
+
+    // ==================== 4. RENDERING QUESTIONS ====================
+    function isQuestionAnswered(q) {
+      const ans = userAnswers[q.id];
+      if (q.type === "single") {
+        return typeof ans === "number";
+      }
+      if (q.type === "matching") {
+        return ans && Object.keys(ans).length === q.left.length && Object.values(ans).every((v) => v !== "");
+      }
+      if (q.type === "numeric") {
+        return ans !== undefined && ans !== null && String(ans).trim() !== "";
+      }
+      return false;
+    }
+
+    function renderPalette() {
+      const strip = document.getElementById("question-palette");
+      strip.innerHTML = QUESTIONS.map((q, idx) => {
+        const activeClass = idx === currentIndex ? "active" : "";
+        const answeredClass = isQuestionAnswered(q) ? "answered" : "";
+        return `<button type="button" onclick="goToQuestion(${idx})" class="q-pill ${answeredClass} ${activeClass}">${q.id}</button>`;
+      }).join("");
+
+      const activePill = strip.children[currentIndex];
+      if (activePill) {
+        activePill.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      }
+    }
+
+    function renderQuestion() {
+      const q = QUESTIONS[currentIndex];
+      const container = document.getElementById("question-container");
+      const letters = ["A", "B", "C", "D"];
+
+      let bodyHtml = `
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <span class="px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 text-[10px] font-extrabold tracking-wide uppercase">
+            ${q.part}
+          </span>
+          <span class="text-[11px] font-medium text-slate-400 truncate">
+            ${q.topic}
+          </span>
+        </div>
+        <h2 class="text-[15px] sm:text-base font-bold text-slate-900 leading-snug mb-3.5">
+          ${q.text}
+        </h2>
+      `;
+
+      if (q.type === "single") {
+        const selectedIdx = userAnswers[q.id];
+        bodyHtml += `<div class="space-y-2">`;
+        q.options.forEach((opt, i) => {
+          const isSelected = selectedIdx === i;
+          bodyHtml += `
+            <button type="button" onclick="selectSingleOption(${q.id}, ${i})" class="option-btn ${isSelected ? "selected" : ""}">
+              <span class="option-letter">${letters[i]}</span>
+              <span class="font-medium">${opt}</span>
+            </button>
+          `;
+        });
+        bodyHtml += `</div>`;
+      } else if (q.type === "matching") {
+        const currentMap = userAnswers[q.id] || {};
+        bodyHtml += `
+          <div class="bg-slate-50 rounded-xl p-2.5 border border-slate-200 mb-3 space-y-1">
+            <div class="text-[11px] font-bold text-slate-500 uppercase mb-1">Вариантҳои ҷавоб:</div>
+            ${q.right.map((r) => `<div class="text-xs font-medium text-slate-700">${r}</div>`).join("")}
+          </div>
+          <div class="space-y-2">
+        `;
+        q.left.forEach((leftItem, rowIdx) => {
+          const val = currentMap[rowIdx] || "";
+          bodyHtml += `
+            <div class="flex items-center justify-between gap-2 p-2.5 rounded-xl border border-slate-200 bg-white">
+              <span class="text-xs font-semibold text-slate-800 leading-tight flex-1">${leftItem}</span>
+              <select
+                onchange="selectMatchingOption(${q.id}, ${rowIdx}, this.value)"
+                class="px-2.5 py-1.5 rounded-lg border border-blue-300 bg-blue-50/60 text-xs font-bold text-blue-900 outline-none"
+              >
+                <option value="">—</option>
+                ${["A", "B", "C", "D", "E"].map((ch) => `<option value="${ch}" ${val === ch ? "selected" : ""}>${ch}</option>`).join("")}
+              </select>
+            </div>
+          `;
+        });
+        bodyHtml += `</div>`;
+      } else if (q.type === "numeric") {
+        const val = userAnswers[q.id] !== undefined ? userAnswers[q.id] : "";
+        bodyHtml += `
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <label for="numeric-input-${q.id}" class="block text-xs font-bold text-slate-700 mb-1.5">
+              Ҷавоби ададиро ворид кунед (${q.unit}):
+            </label>
+            <div class="flex items-center gap-2">
+              <input
+                type="text"
+                inputmode="decimal"
+                id="numeric-input-${q.id}"
+                value="${val}"
+                oninput="updateNumericAnswer(${q.id}, this.value)"
+                placeholder="Ҷавобро нависед..."
+                class="flex-1 px-3 py-2.5 rounded-xl border border-slate-300 bg-white text-sm font-bold text-slate-900 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none"
+              />
+              <span class="px-3 py-2.5 rounded-xl bg-slate-200/70 text-xs font-extrabold text-slate-700">
+                ${q.unit}
+              </span>
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = bodyHtml;
+      container.scrollTop = 0;
+
+      // Update navigation buttons
+      document.getElementById("btn-prev").disabled = currentIndex === 0;
+      document.getElementById("progress-indicator").textContent = `${currentIndex + 1} / ${QUESTIONS.length}`;
+
+      const nextBtn = document.getElementById("btn-next");
+      if (currentIndex === QUESTIONS.length - 1) {
+        nextBtn.innerHTML = `Ҷамъбаст`;
+        nextBtn.onclick = confirmFinishModal;
+      } else {
+        nextBtn.innerHTML = `Ба пеш <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>`;
+        nextBtn.onclick = nextQuestion;
+      }
+    }
+
+    window.selectSingleOption = function (qId, optionIdx) {
+      userAnswers[qId] = optionIdx;
+      renderPalette();
+      renderQuestion();
+    };
+
+    window.selectMatchingOption = function (qId, rowIdx, letter) {
+      if (!userAnswers[qId]) userAnswers[qId] = {};
+      userAnswers[qId][rowIdx] = letter;
+      renderPalette();
+    };
+
+    window.updateNumericAnswer = function (qId, value) {
+      userAnswers[qId] = value;
+      renderPalette();
+    };
+
+    window.goToQuestion = function (idx) {
+      currentIndex = idx;
+      renderPalette();
+      renderQuestion();
+    };
+
+    window.prevQuestion = function () {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderPalette();
+        renderQuestion();
+      }
+    };
+
+    window.nextQuestion = function () {
+      if (currentIndex < QUESTIONS.length - 1) {
+        currentIndex++;
+        renderPalette();
+        renderQuestion();
+      }
+    };
+
+    // ==================== 5. GRADING & RESULTS ====================
+    window.confirmFinishModal = function () {
+      const answeredCount = QUESTIONS.filter((q) => isQuestionAnswered(q)).length;
+      const unanswered = QUESTIONS.length - answeredCount;
+      const modalText = document.getElementById("confirm-modal-text");
+
+      if (unanswered > 0) {
+        modalText.textContent = `Шумо ба ${answeredCount} аз ${QUESTIONS.length} савол ҷавоб додед (${unanswered} савол беҷавоб монд). Оё имтиҳонро анҷом медиҳед?`;
+      } else {
+        modalText.textContent = `Шумо ба ҳамаи ${QUESTIONS.length} савол ҷавоб додед! Оё натиҷаро ҳисоб кунем?`;
+      }
+      const modal = document.getElementById("confirm-modal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    };
+
+    window.closeConfirmModal = function () {
+      const modal = document.getElementById("confirm-modal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    };
+
+    window.finishExam = async function () {
+      closeConfirmModal();
+      if (examFinished) return;
+      examFinished = true;
+      clearInterval(timerInterval);
+
+      let totalScore = 0;
+      const maxScore = QUESTIONS.reduce((acc, q) => acc + q.points, 0); // 42 points
+      const breakdown = [];
+
+      QUESTIONS.forEach((q) => {
+        let earned = 0;
+        let userText = "Ҷавоб дода нашуд";
+        let correctText = "";
+
+        if (q.type === "single") {
+          const letters = ["A", "B", "C", "D"];
+          correctText = `${letters[q.correct]}) ${q.options[q.correct]}`;
+          if (typeof userAnswers[q.id] === "number") {
+            const uIdx = userAnswers[q.id];
+            userText = `${letters[uIdx]}) ${q.options[uIdx]}`;
+            if (uIdx === q.correct) earned = 1;
+          }
+        } else if (q.type === "matching") {
+          const uMap = userAnswers[q.id] || {};
+          const pairs = [];
+          const correctPairs = [];
+          for (let i = 0; i < q.left.length; i++) {
+            const cLetter = q.correctMap[i];
+            const uLetter = uMap[i] || "—";
+            correctPairs.push(`${i + 1}-${cLetter}`);
+            pairs.push(`${i + 1}-${uLetter}`);
+            if (uLetter === cLetter) earned += 1;
+          }
+          userText = pairs.join(", ");
+          correctText = correctPairs.join(", ");
+        } else if (q.type === "numeric") {
+          correctText = `${q.correctNumeric} ${q.unit}`;
+          const raw = userAnswers[q.id];
+          if (raw !== undefined && String(raw).trim() !== "") {
+            const parsed = parseFloat(String(raw).replace(",", ".").trim());
+            userText = `${raw} ${q.unit}`;
+            if (!isNaN(parsed) && Math.abs(parsed - q.correctNumeric) <= 0.05) {
+              earned = 2;
+            }
+          }
+        }
+
+        totalScore += earned;
+        breakdown.push({
+          id: q.id,
+          text: q.text,
+          earned,
+          max: q.points,
+          userText,
+          correctText
+        });
+      });
+
+      const timeSpentSec = 45 * 60 - timeRemaining;
+      const percent = Math.round((totalScore / maxScore) * 100);
+
+      // Save result to leaderboard
+      await saveScoreToLeaderboard({
+        name: studentName,
+        group: studentGroup,
+        score: totalScore,
+        maxScore,
+        percent,
+        timeSpentSec,
+        createdAt: Date.now()
+      });
+
+      renderResults(totalScore, maxScore, percent, timeSpentSec, breakdown);
+    };
+
+    function renderResults(score, maxScore, percent, timeSpentSec, breakdown) {
+      document.getElementById("exam-screen").classList.add("hidden");
+      document.getElementById("exam-screen").classList.remove("flex");
+      const resScreen = document.getElementById("result-screen");
+      resScreen.classList.remove("hidden");
+      resScreen.classList.add("flex");
+
+      const mins = Math.floor(timeSpentSec / 60);
+      const secs = timeSpentSec % 60;
+
+      let html = `
+        <div class="p-3.5 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-md">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <div class="text-xs text-blue-100 font-medium">${studentName}</div>
+              <div class="inline-block px-2 py-0.5 rounded-md bg-white/20 text-[11px] font-bold mt-0.5">
+                Гурӯҳи ${studentGroup}
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-extrabold leading-none">${score} / ${maxScore}</div>
+              <div class="text-[11px] text-blue-100 mt-1">${percent}% • Вақт: ${mins}д ${secs}с</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-xs font-extrabold text-slate-700 pt-1">Таҳлили ҷавобҳо:</div>
+        <div class="space-y-2">
+      `;
+
+      breakdown.forEach((item) => {
+        const isFull = item.earned === item.max;
+        const isPartial = item.earned > 0 && item.earned < item.max;
+        const badgeColor = isFull
+          ? "bg-emerald-100 text-emerald-800 border-emerald-200"
+          : isPartial
+          ? "bg-amber-100 text-amber-800 border-amber-200"
+          : "bg-red-100 text-red-800 border-red-200";
+
+        html += `
+          <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 text-xs">
+            <div class="flex items-start justify-between gap-2 mb-1">
+              <span class="font-bold text-slate-900 leading-snug">${item.text}</span>
+              <span class="px-1.5 py-0.5 rounded-md border font-extrabold text-[10px] shrink-0 ${badgeColor}">
+                ${item.earned}/${item.max}
+              </span>
+            </div>
+            <div class="text-[11px] text-slate-600">
+              Ҷавоби шумо: <span class="font-semibold ${isFull ? "text-emerald-700" : "text-red-600"}">${item.userText}</span>
+            </div>
+            ${
+              !isFull
+                ? `<div class="text-[11px] text-emerald-700 font-semibold mt-0.5">Ҷавоби дуруст: ${item.correctText}</div>`
+                : ""
+            }
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      document.getElementById("result-content").innerHTML = html;
+    }
+
+    window.restartExam = function () {
+      document.getElementById("result-screen").classList.add("hidden");
+      document.getElementById("result-screen").classList.remove("flex");
+      document.getElementById("start-screen").classList.remove("hidden");
+    };
+
+    // ==================== 6. LEADERBOARD MODAL ====================
+    window.openLeaderboard = function () {
+      const modal = document.getElementById("leaderboard-modal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      renderLeaderboard();
+    };
+
+    window.closeLeaderboard = function () {
+      const modal = document.getElementById("leaderboard-modal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    };
+
+    window.setLeaderboardFilter = function (filter) {
+      leaderboardFilter = filter;
+      ["ALL", "5-Б", "5-В"].forEach((tab) => {
+        const el = document.getElementById(`lb-tab-${tab}`);
+        if (tab === filter) {
+          el.className = "flex-1 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white";
+        } else {
+          el.className = "flex-1 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-600 border border-slate-200";
+        }
+      });
+      renderLeaderboard();
+    };
+
+    function renderLeaderboard() {
+      const listEl = document.getElementById("leaderboard-list");
+      let filtered = leaderboardData.filter((item) => item.group === "5-Б" || item.group === "5-В");
+
+      if (leaderboardFilter !== "ALL") {
+        filtered = filtered.filter((item) => item.group === leaderboardFilter);
+      }
+
+      // Sort by highest score first, then fastest time
+      filtered.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return (a.timeSpentSec || 9999) - (b.timeSpentSec || 9999);
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div class="text-center text-xs text-slate-400 py-8">Ҳоло дар ин гурӯҳ натиҷа сабт нашудааст.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = filtered
+        .map((item, idx) => {
+          const medal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `${idx + 1}.`;
+          const mins = Math.floor((item.timeSpentSec || 0) / 60);
+          const secs = (item.timeSpentSec || 0) % 60;
+          const groupBadge =
+            item.group === "5-Б"
+              ? "bg-blue-100 text-blue-800"
+              : "bg-purple-100 text-purple-800";
+
+          return `
+            <div class="flex items-center justify-between gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50/60">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-6 text-center font-extrabold text-xs text-slate-600 shrink-0">${medal}</span>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold text-slate-900 truncate">${item.name}</div>
+                  <div class="flex items-center gap-1.5 mt-0.5">
+                    <span class="px-1.5 py-0.2 rounded text-[10px] font-bold ${groupBadge}">${item.group}</span>
+                    <span class="text-[10px] text-slate-400">${mins}д ${secs}с</span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-right shrink-0">
+                <div class="text-xs font-extrabold text-blue-700">${item.score} / ${item.maxScore || 42}</div>
+                <div class="text-[10px] text-slate-500">${item.percent || 0}%</div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    // ==================== 7. FULLSCREEN API & PSEUDO-FULLSCREEN FALLBACK ====================
+    let isPseudoFullscreen = false;
+
+    function isNativeFullscreenActive() {
+      return Boolean(
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement
+      );
+    }
+
+    function syncFullscreenUI() {
+      const active = isNativeFullscreenActive() || isPseudoFullscreen;
+      document.body.classList.toggle("is-fullscreen-mode", active);
+
+      const startLabel = document.getElementById("start-fs-label");
+      const startExpand = document.getElementById("start-fs-icon-expand");
+      const startCompress = document.getElementById("start-fs-icon-compress");
+
+      const examLabel = document.getElementById("exam-fs-label");
+      const examExpand = document.getElementById("exam-fs-icon-expand");
+      const examCompress = document.getElementById("exam-fs-icon-compress");
+
+      if (startLabel) {
+        startLabel.textContent = active
+          ? "Выйти из полноэкранного режима"
+          : "На весь экран / Ба пуррагии экран";
+      }
+      if (startExpand) startExpand.classList.toggle("hidden", active);
+      if (startCompress) startCompress.classList.toggle("hidden", !active);
+
+      if (examLabel) {
+        examLabel.textContent = active ? "Выйти" : "Весь экран";
+      }
+      if (examExpand) examExpand.classList.toggle("hidden", active);
+      if (examCompress) examCompress.classList.toggle("hidden", !active);
+    }
+
+    window.toggleFullscreen = async function () {
+      const targetEl = document.getElementById("app") || document.documentElement;
+      const hintEl = document.getElementById("fs-status-hint");
+
+      // Exit fullscreen if currently active
+      if (isNativeFullscreenActive() || isPseudoFullscreen) {
+        isPseudoFullscreen = false;
+        try {
+          if (document.exitFullscreen && document.fullscreenElement) {
+            await document.exitFullscreen();
+          } else if (document.webkitExitFullscreen && document.webkitFullscreenElement) {
+            await document.webkitExitFullscreen();
+          } else if (document.mozCancelFullScreen && document.mozFullScreenElement) {
+            await document.mozCancelFullScreen();
+          } else if (document.msExitFullscreen && document.msFullscreenElement) {
+            await document.msExitFullscreen();
+          }
+        } catch (err) {
+          console.warn("Exit fullscreen error:", err);
+        }
+        syncFullscreenUI();
+        return;
+      }
+
+      // Enter native Fullscreen API first (expands #app to 100vw x 100vh hiding Gemini header/footer)
+      try {
+        if (targetEl.requestFullscreen) {
+          await targetEl.requestFullscreen({ navigationUI: "hide" });
+        } else if (targetEl.webkitRequestFullscreen) {
+          await targetEl.webkitRequestFullscreen();
+        } else if (document.documentElement.requestFullscreen) {
+          await document.documentElement.requestFullscreen({ navigationUI: "hide" });
+        } else if (document.documentElement.webkitRequestFullscreen) {
+          await document.documentElement.webkitRequestFullscreen();
+        } else {
+          throw new Error("Fullscreen API unavailable");
+        }
+        isPseudoFullscreen = true;
+        syncFullscreenUI();
+      } catch (err) {
+        // Fallback when iframe sandbox restricts native Fullscreen API:
+        // maximize viewport edge-to-edge (100vw x 100dvh) and display helpful guidance
+        console.warn("Native fullscreen blocked by iframe sandbox, applying maximized mode:", err);
+        isPseudoFullscreen = true;
+        syncFullscreenUI();
+        if (hintEl) {
+          hintEl.textContent = "Реҷаи пурраи экран фаъол шуд (100% экран).";
+          hintEl.classList.remove("text-slate-400");
+          hintEl.classList.add("text-blue-600", "font-semibold");
+        }
+      }
+    };
+
+    ["fullscreenchange", "webkitfullscreenchange", "mozfullscreenchange", "MSFullscreenChange"].forEach((evtName) => {
+      document.addEventListener(evtName, () => {
+        if (!isNativeFullscreenActive()) {
+          isPseudoFullscreen = false;
+        }
+        syncFullscreenUI();
+      });
+    });
+
+    // Initialize on load
+    initFirebase();
+  </script>
+</body>
+</html>
